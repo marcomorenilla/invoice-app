@@ -1,7 +1,7 @@
 import { ItemsRow } from "./ItemsRow";
-import { ItemsTotal } from "./ItemsTotal";
 
-export const ItemsTable = ({ items, total }) => {
+
+export const ItemsTable = ({ items }) => {
 
     return (
         <>
@@ -24,11 +24,12 @@ export const ItemsTable = ({ items, total }) => {
                             <ItemsRow key={id} product={product} price={price} quantity={quantity} />
                         ))
                     }
-                    <ItemsTotal total={total}/>
-                </tbody>
 
+                </tbody>
+                
 
             </table>
+            
         </>
     );
 }
