@@ -8,7 +8,7 @@ export const ItemsTable = ({ items }) => {
             <table className="table fs-4 text-center table-hover table-striped">
                 <thead>
                     <tr>
-                        <th className="fs-1" colSpan={4}>Artículos</th>
+                        <th className="fs-2" colSpan={4}>Artículos</th>
                     </tr>
                     <tr>
                         <th scope="col">Nombre</th>

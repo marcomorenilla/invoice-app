@@ -1,7 +1,7 @@
 export const ItemsTotal = ({ total }) => {
     return (
         <>
-            <table className="table fs-4 text-center table-hover table-striped">
+            <table className="table fs-4 text-center table-hover w-50 mx-auto">
                 <thead>
                     <tr className="fs-2">
                         <th colSpan={4}>Total</th>
