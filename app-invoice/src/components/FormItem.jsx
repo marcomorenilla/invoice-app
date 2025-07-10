@@ -33,20 +33,20 @@ export const FormItem = ({ submitHandler }) => {
                     id="product"
                     name="product"
                     placeholder="Producto"
-                    className="form-control m-3" />
+                    className="form-control form-control-lg m-3" />
                 <input
                     type="text"
                     id="price"
                     name="price"
                     placeholder="Precio"
-                    className="form-control m-3" />
+                    className="form-control form-control-lg m-3" />
                 <input
                     type="text"
                     id="quantity"
                     name="quantity"
                     placeholder="Cantidad"
-                    className="form-control m-3" />
-                <button className="btn btn-primary m-3"> Añadir </button>
+                    className="form-control form-control-lg m-3" />
+                <button className="btn btn-primary btn-lg m-3"> Añadir </button>
             </form>
         </>
     );
