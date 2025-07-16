@@ -45,6 +45,8 @@ export const InvoiceApp = () => {
     const [isVisible, setVisible] = useState(false);
     const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
     const [client, setClient] = useState(invoiceTpl.client);
+    const [number, setNumber] = useState(0);
+    const [date, setDate] = useState('');
 
     useEffect(() => {
         console.log('fetching data...')
@@ -52,6 +54,8 @@ export const InvoiceApp = () => {
         setInvoice(data);
         setItems(data.items);
         setClient(data.client);
+        setNumber(data.number);
+        setDate(data.date);
     }, [])
 
     useEffect(() => {
@@ -72,11 +76,11 @@ export const InvoiceApp = () => {
     useEffect(() => {
         console.log(client);
         setInvoice(prevInvoice => (
-            {...prevInvoice, client}
+            { ...prevInvoice, client }
         ));
     }, [client])
 
-    const { name, vendor,  number } = invoice;
+    const { name, vendor } = invoice;
 
     const openClientDialog = () => setIsClientDialogOpen(true);
     const closeClientDialog = () => setIsClientDialogOpen(false);
@@ -85,9 +89,6 @@ export const InvoiceApp = () => {
         setClient(updatedClient);
         console.log(updatedClient);
     };
-
-
-
 
     const onFormSubmitted = (item) => {
         item.id = counter;
@@ -102,6 +103,28 @@ export const InvoiceApp = () => {
         setItems(items.filter(item => item.id != id))
     }
 
+    const handleDetailsChange = (e) => {
+        const { name, value } = e.target
+        switch (name) {
+            case 'invDate':
+                setDate(value);
+                break;
+            default:
+                setNumber(value);
+        }
+    }
+
+    const handleSendPDF = () => {
+        const finalInvoice = { ...invoice, date, number }
+        if (number == 0) {
+            alert('El número de factura no puede estar vacío o ser 0');
+        } else if (date == '') {
+            alert('La fecha no puede estar vacía');
+        } else {
+            alert(`Factura enviada correctamente ${JSON.stringify(finalInvoice, null, 2)}`)
+        }
+    }
+
     return (
         <>
             <div className="card m-5">
@@ -109,7 +132,7 @@ export const InvoiceApp = () => {
                     <h1 className="card-header text-center mb-3">{name}</h1>
                     <section className="container">
                         <div className="row m-3">
-                            <InvoiceDetails  number={number}/>
+                            <InvoiceDetails handleDetailsChange={handleDetailsChange} />
                         </div>
                         <div className="row">
                             <VendorClientDetails
@@ -157,13 +180,14 @@ export const InvoiceApp = () => {
                             </svg>}
                         </button>
                         {isVisible ? <FormItem submitHandler={onFormSubmitted} /> : ''}
-
-
                     </section>
-
-
                 </div >
+
             </div >
+            <div className="row mx-auto mb-3 w-50">
+                <button className="btn btn-primary btn-lg"
+                    onClick={handleSendPDF}> Enviar PDF</button>
+            </div>
 
         </>
     );
