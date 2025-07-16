@@ -76,7 +76,7 @@ export const InvoiceApp = () => {
         ));
     }, [client])
 
-    const { name, vendor } = invoice;
+    const { name, vendor,  number } = invoice;
 
     const openClientDialog = () => setIsClientDialogOpen(true);
     const closeClientDialog = () => setIsClientDialogOpen(false);
@@ -108,8 +108,8 @@ export const InvoiceApp = () => {
                 <div className="card-boody">
                     <h1 className="card-header text-center mb-3">{name}</h1>
                     <section className="container">
-                        <div className="row">
-                            <InvoiceDetails />
+                        <div className="row m-3">
+                            <InvoiceDetails  number={number}/>
                         </div>
                         <div className="row">
                             <VendorClientDetails

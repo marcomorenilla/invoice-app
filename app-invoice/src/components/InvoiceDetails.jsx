@@ -1,4 +1,4 @@
-export const InvoiceDetails = () => {
+export const InvoiceDetails = ({number}) => {
     return (
         <>
             <div className="d-flex justify-content-end"> 
@@ -10,14 +10,13 @@ export const InvoiceDetails = () => {
                                 type="date"
                                 id="invDate"
                                 name="invDate"
-                                placeholder="__/__/__"
                                 className="form-control form-control-lg ml-3 mb-3 w-80" /> 
                             <h3 className="rounded text-bg-primary opacity-75 p-2">Número de factura: </h3>
                             <input
                                 type="text"
                                 id="number"
                                 name="number"
-                                placeholder="Introduce número de factura"
+                                placeholder={number}
                                 className="form-control form-control-lg ml-3 w-80" /> 
                         </form>
                     </div>
