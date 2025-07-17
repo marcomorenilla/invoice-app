@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### SpringBoot ###
+application.properties
+prueba.pdf
+nbactions.xml
