@@ -4,21 +4,30 @@
  */
 package com.marco.invoice_backend.service;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import static com.marco.invoice_backend.Util.PDFStyle.SECTION_BOLD_FONT;
-import static com.marco.invoice_backend.Util.PDFStyle.SECTION_FONT;
-import static com.marco.invoice_backend.Util.PDFStyle.SECTION_HEADER_FONT;
-import static com.marco.invoice_backend.Util.PDFStyle.TITLE_FONT;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.UnitValue;
+import com.marco.invoice_backend.Util.PDFStyle;
+import static com.marco.invoice_backend.Util.PDFStyle.BLUE;
+import static com.marco.invoice_backend.Util.PDFStyle.SIZE_BIG;
+import static com.marco.invoice_backend.Util.PDFStyle.SIZE_MEDIUM;
+import static com.marco.invoice_backend.Util.PDFStyle.SIZE_SMALL;
+import static com.marco.invoice_backend.Util.PDFStyle.WHITE;
 import com.marco.invoice_backend.models.Invoice;
+import com.marco.invoice_backend.models.Item;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,33 +40,53 @@ public class PDFGenerationService {
     public byte[] generatePDF(Invoice invoice) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Document doc = new Document();
+        PdfWriter writer = new PdfWriter(baos);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document doc = new Document(pdf, PageSize.A4);
+
         
-        try {
-            PdfWriter.getInstance(doc, baos);
-            doc.open();
-
-            Instant hoy = Instant.now();
-
-            Paragraph emptyLine = new Paragraph("");
-
-            Paragraph title = new Paragraph(invoice.getName(), TITLE_FONT);
-            title.setAlignment(Paragraph.ALIGN_CENTER);
-            doc.add(title);
-            Paragraph date = new Paragraph(hoy.toString(), SECTION_HEADER_FONT);
-            doc.add(date);
-            doc.add(emptyLine);
-            Paragraph vendorName = new Paragraph(invoice.getVendor().getName(),SECTION_BOLD_FONT);
-            doc.add(vendorName);
-            Paragraph ending =  new Paragraph("Pues esto sería", SECTION_FONT);
-            doc.add(ending);
-          
-
-        } catch (DocumentException ex) {
+        Instant invDate = invoice.getDate();
+        LocalDateTime ldt = LocalDateTime.ofInstant(invDate, ZoneId.systemDefault());
+        DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dateFormatted = formatter.format(ldt);
+        
+        List<Item> items = invoice.getItems();
+        
+        try{
+            
+             doc.add(PDFStyle.boldParagraph(invoice.getName(), SIZE_BIG));
+             doc.add(PDFStyle.boldParagraph(dateFormatted, SIZE_MEDIUM));
+             doc.add(PDFStyle.boldParagraph(invoice.getVendor().getName(), SIZE_MEDIUM));
+             doc.add(PDFStyle.textParagraph("Pues acabando", SIZE_SMALL));
+             doc.add(PDFStyle.colorBackgroundParagraph(" ", SIZE_BIG, WHITE, BLUE));
+             
+             Table table = new Table(new float[]{1,1,1,1,1});
+             table.setWidth(UnitValue.createPercentValue(100));
+             
+             PDFStyle.processCell(table, PDFStyle.boldParagraph("Producto", SIZE_SMALL), true);
+             PDFStyle.processCell(table, PDFStyle.boldParagraph("Precio", SIZE_SMALL), true);
+             PDFStyle.processCell(table, PDFStyle.boldParagraph("Cantidad", SIZE_SMALL), true);
+             PDFStyle.processCell(table, PDFStyle.boldParagraph("IVA", SIZE_SMALL), true);
+             PDFStyle.processCell(table, PDFStyle.boldParagraph("Total", SIZE_SMALL), true);
+             
+             
+             for (Item item: items){
+                 PDFStyle.processCell(table, PDFStyle.textParagraph(item.getProduct(), SIZE_SMALL), false);
+                 PDFStyle.processCell(table, PDFStyle.textParagraph(String.valueOf(item.getPrice()+" €"), SIZE_SMALL), false);
+                 PDFStyle.processCell(table, PDFStyle.textParagraph(String.valueOf(item.getQuantity()), SIZE_SMALL), false);
+                 PDFStyle.processCell(table, PDFStyle.textParagraph(String.valueOf(item.getIva() + " %"), SIZE_SMALL), false);
+                 PDFStyle.processCell(table, PDFStyle.textParagraph(String.valueOf(item.getPrice() * item.getQuantity())+" €", SIZE_SMALL), false);
+             }
+             
+             doc.add(table);
+             
+             doc.close();
+             
+        }catch(IOException ex){
             ex.printStackTrace();
         }
-
-        doc.close();
+       
+        
 
         return baos.toByteArray();
     }
