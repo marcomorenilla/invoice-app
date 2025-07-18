@@ -7,6 +7,7 @@ package com.marco.invoice_backend.controller;
 import com.marco.invoice_backend.models.Invoice;
 import com.marco.invoice_backend.service.PDFGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class PDFController {
         return "Api funciona";
     }
     
+    @CrossOrigin
     @PostMapping("/pdf")
     public String writePDF(@RequestBody Invoice invoice){
        byte[] pdf = pdfService.generatePDF(invoice);

@@ -4,7 +4,6 @@
  */
 package com.marco.invoice_backend.models;
 
-import java.time.Instant;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ public class Invoice {
 
     private String id;
     private String name;
-    private Instant date;
+    private String date;
     private String number;
     private Party vendor;
     private Party client;
@@ -26,7 +25,7 @@ public class Invoice {
 
     }
 
-    public Invoice(String id, String name, Instant date, String number, Party vendor, Party client, List<Item> items) {
+    public Invoice(String id, String name, String date, String number, Party vendor, Party client, List<Item> items) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -63,11 +62,11 @@ public class Invoice {
         this.name = name;
     }
 
-    public Instant getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

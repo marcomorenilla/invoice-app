@@ -10,9 +10,11 @@ import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.layout.Style;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
 import java.io.IOException;
 
 /**
@@ -94,14 +96,27 @@ public class PDFStyle {
 
     public final static void processCell(Table table, Paragraph paragraph, boolean isHeader) {
 
+        Cell cell = new Cell();
+        cell.add(paragraph);
+       
         if (isHeader) {
-            table.addHeaderCell(
-                    new Cell().add(
-                            paragraph));
+            table.addHeaderCell(cell);
         } else {
-            table.addCell(
-                    new Cell().add(
-                            paragraph));
+            table.addCell(cell);
+        }
+    
+    }
+
+    public final static void processCellNoBorder(Table table, Paragraph paragraph, boolean isRight) {
+        Cell cell = new Cell();
+        cell.add(paragraph);
+        cell.setBorder(Border.NO_BORDER);
+       
+        if (isRight) {
+            cell.setTextAlignment(TextAlignment.RIGHT);
+            table.addCell(cell);
+        } else {
+            table.addCell(cell);
         }
     }
 
