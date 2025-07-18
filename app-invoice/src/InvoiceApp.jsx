@@ -3,7 +3,7 @@ import { VendorClientDetails } from "./components/VendorClientDetails";
 import { ItemsTotal } from "./components/ItemsTotal";
 import { FormItem } from "./components/FormItem";
 import { ItemsTable } from "./components/ItemsTable";
-import { getInvoice, sumTotal } from "./service/getInvoice";
+import { getInvoice, sendPdf, sumTotal } from "./service/getInvoice";
 import { ClientData } from "./components/ClientData";
 import { InvoiceDetails } from "./components/InvoiceDetails";
 
@@ -121,6 +121,7 @@ export const InvoiceApp = () => {
         } else if (date == '') {
             alert('La fecha no puede estar vacía');
         } else {
+            sendPdf(finalInvoice);
             alert(`Factura enviada correctamente ${JSON.stringify(finalInvoice, null, 2)}`)
         }
     }
