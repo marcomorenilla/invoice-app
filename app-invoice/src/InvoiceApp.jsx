@@ -91,6 +91,7 @@ export const InvoiceApp = () => {
     const openInvoiceDialog = () => setInvoiceDialogOpen(true);
     const closeInvoiceDialog = () => setInvoiceDialogOpen(false);
 
+
     const onDialogSubmitted = (updatedClient) => {
         setClient(updatedClient);
         console.log(updatedClient);
@@ -120,19 +121,18 @@ export const InvoiceApp = () => {
         }
     }
 
-    const handleSendPDF = () => {
+    const handleSendPDF = async() => {
         const finalInvoice = { ...invoice, date, number }
         if (number == 0) {
             alert('El número de factura no puede estar vacío o ser 0');
         } else if (date == '') {
             alert('La fecha no puede estar vacía');
         } else {
-            const url = sendPdf(finalInvoice);
+            const url = await sendPdf(finalInvoice);
             setLink(url);
             if (url) {
                 openInvoiceDialog();
             }
-            //alert(`Factura enviada correctamente ${JSON.stringify(finalInvoice, null, 2)}`)
         }
     }
 
@@ -201,7 +201,9 @@ export const InvoiceApp = () => {
                     <button className="btn btn-primary btn-lg"
                         onClick={handleSendPDF}> Enviar PDF</button>
                 </div>
-                <PDFDialog isOpen={isInvoiceDialogOpen} url={link} setUrl={setLink} onCloseDialog={closeInvoiceDialog} />
+                {   isInvoiceDialogOpen?
+                    <PDFDialog isOpen={isInvoiceDialogOpen} url={link} setUrl={setLink} onCloseDialog={closeInvoiceDialog} /> : ''
+                }
             </section>
 
 

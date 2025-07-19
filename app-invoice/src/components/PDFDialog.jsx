@@ -24,9 +24,7 @@ export const PDFDialog = ({ isOpen, url, setUrl, onCloseDialog }) => {
             >
                 Descargar factura
             </a>
-            <button className="btn btn-secondary" onClick={()=>{
-                onCloseDialog;
-            }}>
+            <button className="btn btn-secondary" onClick={onCloseDialog}>
                 Cerrar
             </button>
         </dialog>
