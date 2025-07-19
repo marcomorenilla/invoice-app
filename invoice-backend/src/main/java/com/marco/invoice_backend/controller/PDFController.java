@@ -7,6 +7,10 @@ package com.marco.invoice_backend.controller;
 import com.marco.invoice_backend.models.Invoice;
 import com.marco.invoice_backend.service.PDFGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +38,16 @@ public class PDFController {
     
     @CrossOrigin
     @PostMapping("/pdf")
-    public String writePDF(@RequestBody Invoice invoice){
+    public ResponseEntity<byte []> writePDF(@RequestBody Invoice invoice){
        byte[] pdf = pdfService.generatePDF(invoice);
        pdfService.writePDF(pdf);
-       return"Pdf escrito";
+       
+        HttpHeaders headers =  new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "factura.pdf");
+        headers.setContentLength(pdf.length);
+        
+       return new ResponseEntity<>(pdf,headers,HttpStatus.OK);
     }
     
 }
