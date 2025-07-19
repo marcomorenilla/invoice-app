@@ -6,6 +6,7 @@ import { ItemsTable } from "./components/ItemsTable";
 import { getInvoice, sendPdf, sumTotal } from "./service/getInvoice";
 import { ClientData } from "./components/ClientData";
 import { InvoiceDetails } from "./components/InvoiceDetails";
+import { PDFDialog } from "./components/PDFDialog";
 
 const invoiceTpl = {
     id: 0,
@@ -44,9 +45,11 @@ export const InvoiceApp = () => {
     const [total, setTotal] = useState(0);
     const [isVisible, setVisible] = useState(false);
     const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
+    const [isInvoiceDialogOpen, setInvoiceDialogOpen] = useState(false);
     const [client, setClient] = useState(invoiceTpl.client);
     const [number, setNumber] = useState(0);
     const [date, setDate] = useState('');
+    const [link, setLink] = useState(null);
 
     useEffect(() => {
         console.log('fetching data...')
@@ -85,6 +88,9 @@ export const InvoiceApp = () => {
     const openClientDialog = () => setIsClientDialogOpen(true);
     const closeClientDialog = () => setIsClientDialogOpen(false);
 
+    const openInvoiceDialog = () => setInvoiceDialogOpen(true);
+    const closeInvoiceDialog = () => setInvoiceDialogOpen(false);
+
     const onDialogSubmitted = (updatedClient) => {
         setClient(updatedClient);
         console.log(updatedClient);
@@ -121,8 +127,12 @@ export const InvoiceApp = () => {
         } else if (date == '') {
             alert('La fecha no puede estar vacía');
         } else {
-            sendPdf(finalInvoice);
-            alert(`Factura enviada correctamente ${JSON.stringify(finalInvoice, null, 2)}`)
+            const url = sendPdf(finalInvoice);
+            setLink(url);
+            if (url) {
+                openInvoiceDialog();
+            }
+            //alert(`Factura enviada correctamente ${JSON.stringify(finalInvoice, null, 2)}`)
         }
     }
 
@@ -181,14 +191,19 @@ export const InvoiceApp = () => {
                             </svg>}
                         </button>
                         {isVisible ? <FormItem submitHandler={onFormSubmitted} /> : ''}
+
                     </section>
                 </div >
 
             </div >
-            <div className="row mx-auto mb-3 w-50">
-                <button className="btn btn-primary btn-lg"
-                    onClick={handleSendPDF}> Enviar PDF</button>
-            </div>
+            <section>
+                <div className="row mx-auto mb-3 w-50">
+                    <button className="btn btn-primary btn-lg"
+                        onClick={handleSendPDF}> Enviar PDF</button>
+                </div>
+                <PDFDialog isOpen={isInvoiceDialogOpen} url={link} setUrl={setLink} onCloseDialog={closeInvoiceDialog} />
+            </section>
+
 
         </>
     );

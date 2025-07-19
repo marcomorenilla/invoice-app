@@ -25,25 +25,10 @@ export async function sendPdf(invoice = {}) {
             throw new Error(`Error en el servidor: ${response.status} - ${errorText || 'Respuesta no OK'}`);
         }
 
-        // Espera el blob del PDF
         const blob = await response.blob();
-
-        // Crea un enlace de descarga
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
 
-        // Nombre por defecto del archivo
-        link.setAttribute('download', 'factura.pdf');
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        // Limpia el objeto URL creado
-        window.URL.revokeObjectURL(url);
-
-        return { success: true, message: 'PDF descargado correctamente.' };
+        return url;
     } catch (error) {
         console.error('Error al enviar el PDF:', error);
         return { success: false, message: `Error al enviar la factura: ${error.message}` };
