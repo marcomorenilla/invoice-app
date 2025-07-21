@@ -1,8 +1,10 @@
 import { useRef, useEffect } from 'react';
 
-export const PDFDialog = ({ isOpen, url, setUrl, onCloseDialog }) => {
+export const PDFDialog = ({ isOpen, url, onCloseDialog }) => {
+    // ref del dialog
     const dialogRef = useRef(null);
 
+    // Decide si mostrar o cerrar en función del cambio de isOpen
     useEffect(() => {
         if (dialogRef.current) {
             if (isOpen) {
@@ -20,11 +22,11 @@ export const PDFDialog = ({ isOpen, url, setUrl, onCloseDialog }) => {
             <a
                 href={url}
                 download="factura.pdf"
-                className="btn btn-success me-2"
+                className="btn btn-primary me-2"
             >
                 Descargar factura
             </a>
-            <button className="btn btn-secondary" onClick={onCloseDialog}>
+            <button className="btn btn btn-outline-primary" onClick={onCloseDialog}>
                 Cerrar
             </button>
         </dialog>

@@ -2,8 +2,10 @@
 import { useRef, useEffect } from 'react';
 
 export const ClientData = ({ isOpen, onCloseDialog, onSaveDialog }) => {
+    // referencia del diálogo.
     const dialogRef = useRef(null);
 
+    // useEffect que evalúa isOpen para abrir o cerrar
     useEffect(() => {
         if (dialogRef.current) {
             if (isOpen) {
@@ -16,7 +18,7 @@ export const ClientData = ({ isOpen, onCloseDialog, onSaveDialog }) => {
 
 
 
-
+    // cambio de datos del cliente pasada desde InvoiceApp
     const onDialogSubmitted = (e) => {
         e.preventDefault();
         const newClientData = {

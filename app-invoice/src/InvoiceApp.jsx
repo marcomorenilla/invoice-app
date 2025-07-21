@@ -38,7 +38,7 @@ const invoiceTpl = {
 
 export const InvoiceApp = () => {
 
-
+    // estados de la app
     const [invoice, setInvoice] = useState(invoiceTpl);
     const [items, setItems] = useState(invoiceTpl.items);
     const [counter, setCounter] = useState(4);
@@ -51,6 +51,7 @@ export const InvoiceApp = () => {
     const [date, setDate] = useState('');
     const [link, setLink] = useState(null);
 
+    // useEffect para cargar los datos
     useEffect(() => {
         console.log('fetching data...')
         const data = getInvoice();
@@ -61,6 +62,7 @@ export const InvoiceApp = () => {
         setDate(data.date);
     }, [])
 
+    // useEffect que actualiza el total cuando cambian los items
     useEffect(() => {
         console.log('computing total...')
         const newTotal = sumTotal(items);
@@ -72,10 +74,8 @@ export const InvoiceApp = () => {
         }));
     }, [items])
 
-    useEffect(() => {
-        console.log(invoice);
-    }, [invoice])
 
+    // useEffect para manejar la actualización de datos del cliente
     useEffect(() => {
         console.log(client);
         setInvoice(prevInvoice => (
@@ -83,20 +83,23 @@ export const InvoiceApp = () => {
         ));
     }, [client])
 
+    // Desestructuración de datos fijos en la factura
     const { name, vendor } = invoice;
 
+    // función para abrir y cerrar diálogos de editar cliente y descargar pdf
     const openClientDialog = () => setIsClientDialogOpen(true);
     const closeClientDialog = () => setIsClientDialogOpen(false);
 
     const openInvoiceDialog = () => setInvoiceDialogOpen(true);
     const closeInvoiceDialog = () => setInvoiceDialogOpen(false);
 
-
+    // función para cambiar el cliente cuando se editan los datos
     const onDialogSubmitted = (updatedClient) => {
         setClient(updatedClient);
         console.log(updatedClient);
     };
 
+    // función para añadir un item nuevo a la facutra
     const onFormSubmitted = (item) => {
         item.id = counter;
         const updatedItems = [...items, item];
@@ -106,10 +109,12 @@ export const InvoiceApp = () => {
 
     }
 
+    // función para eliminar items de la factura
     const onItemRemoved = (id) => {
         setItems(items.filter(item => item.id != id))
     }
 
+    // función que captura el cambio de valores tanto de fecha como de números para guardarlos en estado
     const handleDetailsChange = (e) => {
         const { name, value } = e.target
         switch (name) {
@@ -121,6 +126,7 @@ export const InvoiceApp = () => {
         }
     }
 
+    // función que envía JSON y recibe la factura
     const handleSendPDF = async() => {
         const finalInvoice = { ...invoice, date, number }
         if (number == 0) {
