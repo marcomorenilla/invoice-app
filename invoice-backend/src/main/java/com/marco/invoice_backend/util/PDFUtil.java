@@ -2,11 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.marco.invoice_backend.Util;
+package com.marco.invoice_backend.util;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.Color;
-import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.layout.Style;
@@ -21,19 +20,11 @@ import java.io.IOException;
  *
  * @author marco
  */
-public class PDFStyle {
+public class PDFUtil {
 
-    private PDFStyle() {
+    private PDFUtil() {
 
     }
-
-    public final static float SIZE_BIG = 18;
-    public final static float SIZE_MEDIUM = 14;
-    public final static float SIZE_NORMAL = 12;
-    public final static float SIZE_SMALL = 10;
-
-    public final static Color BLUE = ColorConstants.BLUE;
-    public final static Color WHITE = ColorConstants.WHITE;
 
     public final static Paragraph boldParagraph(String text, float size) throws IOException {
 
@@ -98,20 +89,20 @@ public class PDFStyle {
 
         Cell cell = new Cell();
         cell.add(paragraph);
-       
+
         if (isHeader) {
             table.addHeaderCell(cell);
         } else {
             table.addCell(cell);
         }
-    
+
     }
 
     public final static void processCellNoBorder(Table table, Paragraph paragraph, boolean isRight) {
         Cell cell = new Cell();
         cell.add(paragraph);
         cell.setBorder(Border.NO_BORDER);
-       
+
         if (isRight) {
             cell.setTextAlignment(TextAlignment.RIGHT);
             table.addCell(cell);
